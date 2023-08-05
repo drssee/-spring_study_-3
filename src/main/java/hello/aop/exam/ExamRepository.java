@@ -1,9 +1,12 @@
 package hello.aop.exam;
 
+import hello.aop.exam.annotaion.Retry;
 import hello.aop.exam.annotaion.Trace;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Slf4j
 public class ExamRepository {
 
     private static int seq = 0;
@@ -12,9 +15,11 @@ public class ExamRepository {
      * 5번에 1번 실패하는 요청
      */
     @Trace
+    @Retry
     public String save(String itemId) {
         seq++;
         if (seq % 5 == 0) {
+            log.info("error sequence={}", seq);
             throw new IllegalStateException("예외 발생");
         }
         return "ok";
